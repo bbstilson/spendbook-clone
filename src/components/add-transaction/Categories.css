@@ -1,0 +1,30 @@
+.category-wrapper {
+  display: inline-block;
+}
+
+.category {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.category-icon {
+  border-radius: 100%;
+  border: 1px solid white;
+  padding-top: 12px;
+  height: 40px;
+  width: 40px;
+  margin-bottom: 5px;
+}
+
+.category-icon.expense-icon {
+  border: 1px solid #ff6150;
+  background-color: #ff6150;
+}
+
+.category-icon.income-icon {
+  border: 1px solid #69bebe;
+  background-color: #69bebe;
+}

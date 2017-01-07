@@ -1,0 +1,10 @@
+.transaction-type {
+  display: inline-block;
+  color: hsl(0, 0%, 70%);
+  cursor: pointer;
+  padding: 12px 15px;
+}
+
+.transaction-type.selected {
+  color: hsl(0, 0%, 100%);
+}
