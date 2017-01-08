@@ -5,13 +5,13 @@ import './TransactionTypeToggle.css';
 function getClassnames(selected) {
   return classnames('transaction-type', { selected });
 }
-const TransactionTypeToggle = ({ selected, value, onClick }) => (
-  <p className={getClassnames(selected)} onClick={onClick}>{value}</p>
+const TransactionTypeToggle = ({ selected, children, onClick }) => (
+  <p className={getClassnames(selected)} onClick={onClick}>{children}</p>
 );
 
 TransactionTypeToggle.propTypes = {
   selected: PropTypes.bool.isRequired,
-  value: PropTypes.string.isRequired,
+  children: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired
 };
 

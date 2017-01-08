@@ -2,7 +2,7 @@ import TransactionOverview from './containers/TransactionOverview';
 import AddTransaction from './containers/AddTransaction';
 import ConfirmTransaction from './containers/ConfirmTransaction';
 
-import { View } from './redux/modules/app';
+import View from './constants/View';
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -26,6 +26,7 @@ class App extends Component {
     return (
       <div className="app">
         {this.getActiveView()}
+        <pre>{JSON.stringify(this.props, null, 2)}</pre>
       </div>
     );
   }
@@ -33,6 +34,7 @@ class App extends Component {
 
 function mapStateToProps({ app }) {
   return {
+    app,
     activeView: app.activeView
   };
 }

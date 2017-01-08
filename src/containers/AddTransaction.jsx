@@ -1,18 +1,17 @@
 import TransactionTypeToggle from '../components/add-transaction/TransactionTypeToggle';
-import ExpenseCategories from '../components/add-transaction/ExpenseCategories';
-import IncomeCategories from '../components/add-transaction/IncomeCategories';
+import TransactionAmount from '../components/add-transaction/TransactionAmount';
+import CategoryMap from '../components/add-transaction/CategoryMap';
 
-import { View, changeView } from '../redux/modules/app';
+import { changeView, updateTransaction } from '../redux/modules/app';
+import View from '../constants/View';
+import TransactionType from '../constants/TransactionType';
+import expenseCategories from '../models/expenseCategories';
+import incomeCategories from '../models/incomeCategories';
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import './ContainerView.css';
 import './AddTransaction.css';
-
-const TransactionType = {
-  EXPENSE: 'EXPENSE',
-  INCOME: 'INCOME'
-};
 
 class AddTransaction extends Component {
   static propTypes = {
@@ -21,24 +20,15 @@ class AddTransaction extends Component {
 
   constructor() {
     super();
-    this.state = {
-      transactionType: TransactionType.EXPENSE,
-      category: 'Food'
-    }
-    this.updateTransactionType = this.updateTransactionType.bind(this);
+    this.updateTransaction = this.updateTransaction.bind(this);
   }
 
-  updateTransactionType(transactionType) {
-    this.setState({ transactionType });
-  }
-
-  updateCategory(category) {
-    this.setState({ category });
+  updateTransaction(key, value) {
+    this.props.updateTransaction(key, value);
   }
 
   render() {
-    const { transactionType } = this.state;
-    const { changeView } = this.props;
+    const { type, category, amount, changeView } = this.props;
 
     return (
       <div className="overview">
@@ -49,33 +39,51 @@ class AddTransaction extends Component {
         </div>
         <div>
           <TransactionTypeToggle
-              selected={transactionType === TransactionType.EXPENSE}
-              onClick={() => { this.updateTransactionType(TransactionType.EXPENSE) }}
-              value={TransactionType.EXPENSE} />
+              selected={type === TransactionType.EXPENSE}
+              onClick={() => this.updateTransaction('type', TransactionType.EXPENSE) }>
+            {TransactionType.EXPENSE}
+          </TransactionTypeToggle>
           <span className="transaction-type--spacer">|</span>
           <TransactionTypeToggle
-              selected={transactionType === TransactionType.INCOME}
-              onClick={() => { this.updateTransactionType(TransactionType.INCOME) }}
-              value={TransactionType.INCOME} />
+              selected={type === TransactionType.INCOME}
+              onClick={() => this.updateTransaction('type', TransactionType.INCOME) } >
+            {TransactionType.INCOME}
+          </TransactionTypeToggle>
         </div>
+        <TransactionAmount amount={amount} updateAmount={(e) => { this.updateTransaction('amount', e.target.value) }} />
         {
-          transactionType === TransactionType.EXPENSE
-            ? <ExpenseCategories updateCategory={this.updateCategory} />
-            : <IncomeCategories updateCategory={this.updateCategory} />
+          type === TransactionType.EXPENSE
+            ? <CategoryMap
+                selected={category}
+                category={TransactionType.EXPENSE}
+                categories={expenseCategories}
+                updateCategory={(cat) => { this.updateTransaction('category', cat) }} />
+            : <CategoryMap
+                selected={category}
+                category={TransactionType.INCOME}
+                categories={incomeCategories}
+                updateCategory={(cat) => { this.updateTransaction('category', cat) }} />
         }
       </div>
     );
   }
 }
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps({ app }) {
+  return {
+    type: app.newTransaction.get('type'),
+    category: app.newTransaction.get('category'),
+    amount: app.newTransaction.get('amount')
+  }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     changeView(view) {
       dispatch(changeView(view));
+    },
+    updateTransaction(key, value) {
+      dispatch(updateTransaction(key, value));
     }
   };
 }
