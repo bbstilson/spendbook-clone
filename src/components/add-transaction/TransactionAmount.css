@@ -1,0 +1,8 @@
+.transaction-amount {
+  margin: 20px 0;
+  background-color: transparent;
+  color: #ff6150;
+  border: none;
+  text-align: center;
+  font-size: 2em
+}

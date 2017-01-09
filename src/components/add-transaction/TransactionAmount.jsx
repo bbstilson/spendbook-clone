@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
+import './TransactionAmount.css';
 
 const TransactionAmount = ({ amount, updateAmount }) => (
-  <input type="number" value={amount} onChange={updateAmount} />
+  <input className="transaction-amount" type="number" value={amount} onChange={updateAmount} />
 );
 
 TransactionAmount.propTypes = {
