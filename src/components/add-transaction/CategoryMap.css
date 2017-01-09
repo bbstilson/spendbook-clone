@@ -1,6 +1,6 @@
 .category-map {
   display: flex;
-  flex-flow: row nowrap;
-  justify-content: center;
+  flex-flow: row wrap;
+  justify-content: flex-start;
   align-items: center;
 }

@@ -3,12 +3,14 @@
   flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
+  width: 100px;
   padding: 10px;
+  cursor: pointer;
+  font-size: 1em;
 }
 
 .category-icon {
   border-radius: 100%;
-  border: 1px solid white;
   padding-top: 12px;
   height: 40px;
   width: 40px;

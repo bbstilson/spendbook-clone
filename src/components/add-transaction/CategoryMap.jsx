@@ -5,7 +5,7 @@ import Immutable from 'immutable';
 import './CategoryMap.css';
 
 const CategoryMap = ({ selected, category, categories, updateCategory }) => (
-  <div className={`category-map ${category}`}>
+  <div className="category-map">
     {categories.map(({ name, icon }) => (
       <Category
           key={name}

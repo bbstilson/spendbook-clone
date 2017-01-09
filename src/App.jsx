@@ -1,6 +1,5 @@
 import TransactionOverview from './containers/TransactionOverview';
 import AddTransaction from './containers/AddTransaction';
-import ConfirmTransaction from './containers/ConfirmTransaction';
 
 import View from './constants/View';
 
@@ -15,8 +14,6 @@ class App extends Component {
         return <TransactionOverview />;
       case View.ADD_TRANSACTION:
         return <AddTransaction />;
-      case View.CONFIRM_TRANSACTION:
-        return <ConfirmTransaction />;
       default:
         return <TransactionOverview />;
     }

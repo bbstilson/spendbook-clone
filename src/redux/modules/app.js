@@ -16,10 +16,12 @@ export function changeView(view) {
   };
 }
 
+// TODO: put into its own model file
 const newTransaction = Immutable.Record({
   type: TransactionType.EXPENSE,
   category: '',
-  amount: '0'
+  amount: '0',
+  note: ''
 });
 
 export function addTransaction() {
