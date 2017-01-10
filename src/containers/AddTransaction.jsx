@@ -1,8 +1,10 @@
 import TransactionTypeToggle from '../components/add-transaction/TransactionTypeToggle';
 import TransactionAmount from '../components/add-transaction/TransactionAmount';
+import TransactionNotes from '../components/add-transaction/TransactionNotes';
 import CategoryMap from '../components/add-transaction/CategoryMap';
 
-import { changeView, updateTransaction } from '../redux/modules/app';
+import { changeView } from '../redux/modules/app';
+import { updateTransaction, finalizeTransaction } from '../redux/modules/transaction';
 import View from '../constants/View';
 import TransactionType from '../constants/TransactionType';
 import expenseCategories from '../models/expenseCategories';
@@ -15,65 +17,81 @@ import './AddTransaction.css';
 
 class AddTransaction extends Component {
   static propTypes = {
-    changeView: PropTypes.func.isRequired
+    type: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
+    amount: PropTypes.string.isRequired,
+    notes: PropTypes.string.isRequired,
+    changeView: PropTypes.func.isRequired,
+    updateTransaction: PropTypes.func.isRequired,
+    finalizeTransaction: PropTypes.func.isRequired
   }
 
   constructor() {
     super();
-    this.updateTransaction = this.updateTransaction.bind(this);
+    this.confirmTransaction = this.confirmTransaction.bind(this);
   }
 
-  updateTransaction(key, value) {
-    this.props.updateTransaction(key, value);
+  confirmTransaction() {
+    const { finalizeTransaction, changeView } = this.props;
+
+    finalizeTransaction();
+    changeView(View.OVERVIEW);
   }
 
   render() {
-    const { type, category, amount, changeView } = this.props;
+    const { type, category, amount, notes, changeView, updateTransaction } = this.props;
 
     return (
       <div className="overview">
         <div className="header">
           <button onClick={() => { changeView(View.OVERVIEW) }}>{'<'}</button>
           <h1>Add Transaction</h1>
-          <button onClick={() => { changeView(View.CONFIRM_TRANSACTION) }}>Next</button>
+          <button onClick={this.confirmTransaction}>Done</button>
         </div>
         <div>
           <TransactionTypeToggle
               selected={type === TransactionType.EXPENSE}
-              onClick={() => this.updateTransaction('type', TransactionType.EXPENSE) }>
+              onClick={() => updateTransaction('type', TransactionType.EXPENSE) }>
             {TransactionType.EXPENSE}
           </TransactionTypeToggle>
           <span className="transaction-type--spacer">|</span>
           <TransactionTypeToggle
               selected={type === TransactionType.INCOME}
-              onClick={() => this.updateTransaction('type', TransactionType.INCOME) } >
+              onClick={() => updateTransaction('type', TransactionType.INCOME) } >
             {TransactionType.INCOME}
           </TransactionTypeToggle>
         </div>
-        <TransactionAmount amount={amount} updateAmount={(e) => { this.updateTransaction('amount', e.target.value) }} />
+        <TransactionAmount
+            amount={amount}
+            type={type.toLowerCase()}
+            updateAmount={(e) => { updateTransaction('amount', e.target.value) }} />
         {
           type === TransactionType.EXPENSE
             ? <CategoryMap
                 selected={category}
                 category={TransactionType.EXPENSE}
                 categories={expenseCategories}
-                updateCategory={(cat) => { this.updateTransaction('category', cat) }} />
+                updateCategory={(cat) => { updateTransaction('category', cat) }} />
             : <CategoryMap
                 selected={category}
                 category={TransactionType.INCOME}
                 categories={incomeCategories}
-                updateCategory={(cat) => { this.updateTransaction('category', cat) }} />
+                updateCategory={(cat) => { updateTransaction('category', cat) }} />
         }
+        <TransactionNotes text={notes} updateNotes={(e) => { updateTransaction('notes', e.target.value) }} />
+        <pre style={{ textAlign: 'left' }}>{JSON.stringify(this.props, null, 2)}</pre>
       </div>
     );
   }
 }
 
-function mapStateToProps({ app }) {
+function mapStateToProps({ transaction }) {
   return {
-    type: app.newTransaction.get('type'),
-    category: app.newTransaction.get('category'),
-    amount: app.newTransaction.get('amount')
+    type: transaction.newTransaction.get('type'),
+    category: transaction.newTransaction.get('category'),
+    icon: transaction.newTransaction.get('icon'),
+    amount: transaction.newTransaction.get('amount'),
+    notes: transaction.newTransaction.get('notes')
   }
 }
 
@@ -84,6 +102,9 @@ function mapDispatchToProps(dispatch) {
     },
     updateTransaction(key, value) {
       dispatch(updateTransaction(key, value));
+    },
+    finalizeTransaction() {
+      dispatch(finalizeTransaction());
     }
   };
 }

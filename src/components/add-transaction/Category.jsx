@@ -1,15 +1,12 @@
-import React, { PropTypes } from 'react';
-import classnames from 'classnames';
-import './Category.css';
+import Icon from '../common/Icon';
 
-function getClassnames(active, category, icon) {
-  return classnames(icon, category.toLowerCase(), 'category-icon', 'fa', 'fa-lg', { active });
-}
+import React, { PropTypes } from 'react';
+import './Category.css';
 
 const Category = ({ active, category, name, icon, onClick }) => (
   <div onClick={onClick}>
     <div key={name} className="category">
-      <span className={getClassnames(active, category, icon)} />
+      <Icon icon={icon} category={category} active={active} />
       {name}
     </div>
   </div>

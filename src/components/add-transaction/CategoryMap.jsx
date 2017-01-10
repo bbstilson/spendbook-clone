@@ -6,14 +6,14 @@ import './CategoryMap.css';
 
 const CategoryMap = ({ selected, category, categories, updateCategory }) => (
   <div className="category-map">
-    {categories.map(({ name, icon }) => (
+    {categories.map((cat) => (
       <Category
-          key={name}
+          key={cat.name}
           category={category}
-          name={name}
-          icon={icon}
-          active={selected === name}
-          onClick={() => { updateCategory(name) }} />
+          name={cat.name}
+          icon={cat.icon}
+          active={selected === cat.name}
+          onClick={() => { updateCategory(cat) }} />
     ))}
   </div>
 );

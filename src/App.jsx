@@ -23,7 +23,6 @@ class App extends Component {
     return (
       <div className="app">
         {this.getActiveView()}
-        <pre>{JSON.stringify(this.props, null, 2)}</pre>
       </div>
     );
   }
@@ -31,12 +30,8 @@ class App extends Component {
 
 function mapStateToProps({ app }) {
   return {
-    app,
     activeView: app.activeView
   };
 }
 
 export default connect(mapStateToProps)(App)
-// red: #ff6150
-// blue: #69bebe
-// white: #ffffff
