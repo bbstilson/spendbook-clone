@@ -1,0 +1,50 @@
+.transaction {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.transaction-info__left {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.transaction-text {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: flex-start;
+  margin-left: 5px;
+}
+
+.transaction-text {
+  font-weight: 300;
+}
+
+.transaction-header {
+  font-size: 1.3em;
+}
+
+.transaction-notes {
+  color: hsla(0, 0%, 100%, 0.5);
+  font-size: 0.9em;
+}
+
+.transaction-info__right .transaction-amount {
+  font-weight: 400;
+  font-size: 1.3em;
+  margin: 0;
+}
+
+
+.transaction-amount.expense {
+  color: #ff6150;
+}
+
+.transaction-amount.income {
+  color: #69bebe;
+}

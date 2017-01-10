@@ -1,3 +1,7 @@
+.header h1 {
+  font-weight: 300;
+}
+
 .transaction-type--spacer {
   margin: 0 15px;
 }

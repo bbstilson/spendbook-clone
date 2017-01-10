@@ -1,8 +1,15 @@
 .transaction-amount {
   margin: 20px 0;
   background-color: transparent;
-  color: #ff6150;
   border: none;
   text-align: center;
   font-size: 2em
+}
+
+.transaction-amount.expense {
+  color: #ff6150;
+}
+
+.transaction-amount.income {
+  color: #69bebe;
 }
