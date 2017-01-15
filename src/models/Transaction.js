@@ -8,5 +8,6 @@ export default Immutable.Record({
   category: expenseCategories.first().get('name'),
   icon: expenseCategories.first().get('icon'),
   amount: '0',
-  notes: ''
+  notes: '',
+  date: new Date()
 });

@@ -32,14 +32,14 @@ export function finalizeTransaction() {
 }
 
 function updatedTransaction(state, action) {
-  const type = action.key === 'type' ?     action.value : state.get('type');
+  const type = action.key === 'type' ? action.value : state.get('type');
 
   const updatedCategoryIcon = updateCategoryIcon(state, action);
   const category = updatedCategoryIcon.get('name');
   const icon = updatedCategoryIcon.get('icon');
 
-  const amount = action.key === 'amount' ?   santizeAmount(action.value) : state.get('amount');
-  const notes = action.key === 'notes' ?     action.value : state.get('notes');
+  const amount = action.key === 'amount' ? santizeAmount(action.value) : state.get('amount');
+  const notes = action.key === 'notes' ? action.value : state.get('notes');
 
   return Transaction({ type, category, icon, amount, notes });
 }

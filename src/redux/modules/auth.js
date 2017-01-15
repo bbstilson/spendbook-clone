@@ -1,4 +1,4 @@
-// import { authenticate, unauthenticate } from '../../constants/firebase/auth';
+import { authenticate, unauthenticate } from '../../firebase/auth';
 
 /**
  * CONSTANTS
@@ -13,52 +13,52 @@ const UNAUTH = 'UNAUTH';
  * ACTIONS
  */
 
-// export function login (email, pw) {
-//   return dispatch => {
-//     dispatch(authenticating());
+export function login (email, pw) {
+  return dispatch => {
+    dispatch(authenticating());
 
-//     return authenticate(email, pw)
-//       .then((user) => {
-//         dispatch(authSuccess(user.uid, user, Date.now()));
-//       })
-//       .catch(err => {
-//         dispatch(authFailed(err));
-//       });
-//   }
-// }
+    return authenticate(email, pw)
+      .then((user) => {
+        dispatch(authSuccess(user.uid, user, Date.now()));
+      })
+      .catch(err => {
+        dispatch(authFailed(err));
+      });
+  }
+}
 
-// function authenticating () {
-//   return {
-//     type: AUTHENTICATING
-//   };
-// }
+function authenticating () {
+  return {
+    type: AUTHENTICATING
+  };
+}
 
-// function authSuccess (uid, user, timestamp) {
-//   return {
-//     uid,
-//     type: AUTH_SUCCESS,
-//   };
-// }
+export function authSuccess (uid, user, timestamp) {
+  return {
+    uid,
+    type: AUTH_SUCCESS,
+  };
+}
 
-// function authFailed (error) {
-//   return {
-//     error,
-//     type: AUTH_FAILED
-//   };
-// }
+function authFailed (error) {
+  return {
+    error,
+    type: AUTH_FAILED
+  };
+}
 
-// export function logout () {
-//   return dispatch => {
-//     dispatch(unauthUser());
-//     unauthenticate();
-//   }  
-// }
+export function logout () {
+  return dispatch => {
+    dispatch(unauthUser());
+    unauthenticate();
+  }  
+}
 
-// function unauthUser () {
-//   return {
-//     type: UNAUTH
-//   };
-// }
+function unauthUser () {
+  return {
+    type: UNAUTH
+  };
+}
 
 // function unauthUserSuccess () {
 //   return {

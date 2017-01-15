@@ -1,4 +1,4 @@
-import App from './App.jsx';
+import Router from './Router.jsx';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -7,7 +7,7 @@ import createStore from './redux/create';
 
 ReactDOM.render(
   <Provider store={createStore()}>
-    <App />
+    <Router />
   </Provider>,
   document.getElementById('root')
 );

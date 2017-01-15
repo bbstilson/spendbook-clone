@@ -3,3 +3,6 @@
   max-width: 600px;
   margin: 0 auto;
 }
+a, a:link, a:visited, a:hover, a:active {
+  color: #fff;
+}
