@@ -30,7 +30,6 @@ class TransactionOverview extends Component {
         </div>
         {/* TODO: replace index key with ID. also, add uid to transaction */}
         {this.props.transactions.map((t, i) => <Transaction key={i} transaction={t} />)}
-        <pre style={{ textAlign: 'left' }}>{JSON.stringify(this.props.transactions, null, 2)}</pre>
       </div>
     );
   }

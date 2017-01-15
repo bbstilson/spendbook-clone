@@ -79,7 +79,6 @@ class AddTransaction extends Component {
                 updateCategory={(cat) => { updateTransaction('category', cat) }} />
         }
         <TransactionNotes text={notes} updateNotes={(e) => { updateTransaction('notes', e.target.value) }} />
-        <pre style={{ textAlign: 'left' }}>{JSON.stringify(this.props, null, 2)}</pre>
       </div>
     );
   }
