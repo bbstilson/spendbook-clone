@@ -8,6 +8,9 @@
 
 .login__error {
   margin-bottom: 10px;
+  font-weight: 300;
+  color: hsla(0, 0%, 100%, 0.8);
+  font-style: italic;
 }
 
 .login__container {

@@ -25,13 +25,15 @@ class Login extends Component {
   handleEmailInput = (e) => {
     this.setState({
       email: e.target.value,
-      emailError: false
+      emailError: false,
+      pwError: false
     });
   }
 
   handlePasswordInput = (e) => {
     this.setState({
       password: e.target.value,
+      emailError: false,
       pwError: false
     });
   }
@@ -52,6 +54,7 @@ class Login extends Component {
 
   render () {
     const { emailError, pwError, email, password } = this.state;
+    const { authenticating, authFailed } = this.props;
 
     const emailClasses = classnames("login__input", { 'input-error': emailError });
     const pwClasses = classnames("login__input", { 'input-error': pwError });
@@ -59,23 +62,26 @@ class Login extends Component {
     return (
       <div className="login">
           {
-            this.props.authenticating ? (
+            authenticating ? (
               <Loading />
             ) : (
               <div className="login__container">
                 <div>
                   <h1 className="login__title">Login</h1>
-                  {(emailError || pwError) && <p>Oops. Looks like you forgot to enter something...</p>}
+                  {authFailed && <p className="login__error">{authFailed}</p>}
+                  {(emailError || pwError) && <p className="login__error">Oops. Looks like you forgot to enter something...</p>}
                   <form onSubmit={this.handleSubmit}>
                     <Input
                         classes={emailClasses}
                         type="email"
+                        name="email"
                         placeholder="Email"
                         value={email}
                         onChange={this.handleEmailInput} />
                     <Input
                         classes={pwClasses}
                         type="password"
+                        name="password"
                         placeholder="Password"
                         value={password}
                         onChange={this.handlePasswordInput} />

@@ -15,11 +15,12 @@ class TransactionOverview extends Component {
   }
 
   createNewTransaction() {
-    const { changeView, addTransaction } = this.props;
+    const { changeView, addTransaction, uid } = this.props;
 
     changeView(View.ADD_TRANSACTION);
     addTransaction();
   }
+
   render() {
     return (
       <div className="overview">
@@ -28,15 +29,17 @@ class TransactionOverview extends Component {
           <h1>Overview</h1>
           <button onClick={this.createNewTransaction}>+</button>
         </div>
-        {/* TODO: replace index key with ID. also, add uid to transaction */}
+        {/* TODO: replace index key with ID. also, add tid to transaction */}
         {this.props.transactions.map((t, i) => <Transaction key={i} transaction={t} />)}
       </div>
     );
   }
 }
 
-function mapStateToProps({ transaction }) {
+function mapStateToProps({ transaction, auth, database }) {
   return {
+    username: database.username,
+    uid: auth.authedId,
     transactions: transaction.transactions
   };
 }

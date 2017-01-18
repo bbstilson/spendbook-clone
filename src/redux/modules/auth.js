@@ -1,4 +1,5 @@
 import { authenticate, unauthenticate } from '../../firebase/auth';
+import { fetchUserName } from './database';
 
 /**
  * CONSTANTS
@@ -19,6 +20,7 @@ export function login (email, pw) {
 
     return authenticate(email, pw)
       .then((user) => {
+        dispatch(fetchUserName(user.uid));
         dispatch(authSuccess(user.uid, user, Date.now()));
       })
       .catch(err => {
@@ -42,9 +44,21 @@ export function authSuccess (uid, user, timestamp) {
 
 function authFailed (error) {
   return {
-    error,
+    error: toUserFriendlyErrorMessage(error),
     type: AUTH_FAILED
   };
+}
+
+function toUserFriendlyErrorMessage(error) {
+  console.log(error);
+  switch(error.code) {
+    case 'auth/user-not-found':
+      return "Sorry, we couldn't find that user.";
+    case 'auth/invalid-email':
+      return "Oops, looks like you didn't enter a valid email.";
+    default:
+      return "Sorry, something happened. Try again. If it keeps happening, let me know.";
+  }
 }
 
 export function logout () {

@@ -6,14 +6,14 @@ const SIGNING_UP = 'SIGNING_UP';
 const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
 const SIGNUP_FAILED = 'SIGNUP_FAILED';
 
-export function signup(email, pw) {
+export function signup(name, email, pw) {
   return dispatch => {
     dispatch(signingUp());
 
     return createUser(email, pw)
       .then(user => {
         dispatch(signupSuccess());
-        dispatch(addNewUserToDb(user.uid));
+        dispatch(addNewUserToDb(name, user.uid));
         dispatch(authSuccess(user.uid, user, Date.now()));
       })
       .catch(err => {
