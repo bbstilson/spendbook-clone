@@ -1,3 +1,5 @@
+import { checkStatus } from '../../utils/api';
+
 import axios from 'axios';
 
 const API_ROOT = 'http://localhost:1337';
@@ -36,8 +38,10 @@ function addNewUserFailed(error) {
 export function fetchUserName(uid) {
   return dispatch => {
     axios.get(`${API_ROOT}/api/user/${uid}`)
-      .then(({ data }) => {
-        dispatch(fetchUserNameSuccess(data.res.name));
+      .then(checkStatus)
+      .then(({ res }) => {
+        console.log(res);
+        dispatch(fetchUserNameSuccess(res.name));
       })
       .catch(err => {
         console.error('fetchUserName error: ', err);
