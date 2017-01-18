@@ -25,8 +25,9 @@ export function updateTransaction(key, value) {
   };
 }
 
-export function finalizeTransaction() {
+export function finalizeTransaction(uid) {
   return {
+    uid,
     type: FINALIZE_TRANSACTION
   };
 }

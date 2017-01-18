@@ -32,9 +32,9 @@ class AddTransaction extends Component {
   }
 
   confirmTransaction() {
-    const { finalizeTransaction, changeView } = this.props;
+    const { finalizeTransaction, changeView, uid } = this.props;
 
-    finalizeTransaction();
+    finalizeTransaction(uid);
     changeView(View.OVERVIEW);
   }
 
@@ -84,8 +84,9 @@ class AddTransaction extends Component {
   }
 }
 
-function mapStateToProps({ transaction }) {
+function mapStateToProps({ transaction, auth }) {
   return {
+    uid: auth.authedId,
     type: transaction.newTransaction.get('type'),
     category: transaction.newTransaction.get('category'),
     icon: transaction.newTransaction.get('icon'),
@@ -94,18 +95,4 @@ function mapStateToProps({ transaction }) {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    changeView(view) {
-      dispatch(changeView(view));
-    },
-    updateTransaction(key, value) {
-      dispatch(updateTransaction(key, value));
-    },
-    finalizeTransaction() {
-      dispatch(finalizeTransaction());
-    }
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddTransaction)
+export default connect(mapStateToProps, { changeView, updateTransaction, finalizeTransaction })(AddTransaction)
