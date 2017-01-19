@@ -1,5 +1,5 @@
 import { authenticate, unauthenticate } from '../../firebase/auth';
-import { fetchUserName } from './database';
+import { fetchUserData } from './database';
 
 /**
  * CONSTANTS
@@ -20,7 +20,7 @@ export function login (email, pw) {
 
     return authenticate(email, pw)
       .then((user) => {
-        dispatch(fetchUserName(user.uid));
+        dispatch(fetchUserData(user.uid));
         dispatch(authSuccess(user.uid, user, Date.now()));
       })
       .catch(err => {

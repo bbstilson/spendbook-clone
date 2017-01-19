@@ -7,7 +7,7 @@ const pg = require('pg');
 // https://devcenter.heroku.com/articles/heroku-postgresql#connecting-in-node-js
 // pg.defaults.ssl = true;
 
-const DATABASE_URL = process.env.DATABASE_URL || 'postgres:///brandonstilson';
+const DATABASE_URL = process.env.DATABASE_URL || 'postgres:///brandons';
 
 const app = express();
 // ALLOW CORS
@@ -32,15 +32,22 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 app.get('/api/user/:uid', (req, res) => {
   const uid = req.params.uid;
 
+  const QUERY =
+    'SELECT t.*, u.name, u.total FROM transactions t ' +
+    'INNER JOIN users u ' +
+    'ON u.uid = t.uid ' +
+    'WHERE u.uid = $1 ' +
+    'ORDER BY date;'
+
   pg.connect(DATABASE_URL, (err, client) => {
     if (!err) {
-      client.query('SELECT * FROM users WHERE uid = $1', [uid], (err, result) => {
+      client.query(QUERY, [uid], (err, result) => {
         if (!err) {
           if (result.rows.length === 0) {
             const errorMsg = `No results for uid: ${uid}`;
             res.json({ status: 500, msg: errorMsg });
           } else {
-            res.json(successJson(result.rows[0]));
+            res.json(successJson(result.rows));
           }
         } else {
           res.json({ status: 500, msg: err.detail });
@@ -108,13 +115,15 @@ app.post('/api/user', (req, res) => {
     http://localhost:1337/api/transactions
  */
 app.post('/api/transactions', (req, res) => {
-  const { uid, tid, category, type, icon, amount, notes, date } = req.body;
+  const { uid, tid, type, category, icon, amount, notes, date } = req.body;
 
-  const QUERY = `INSERT INTO transactions (uid, tid, type, category, icon, amount, notes, date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`;
+  const QUERY =
+    'INSERT INTO transactions (uid, tid, type, category, icon, amount, notes, date) ' +
+    'VALUES ($1, $2, $3, $4, $5, $6, $7, $8)';
 
   pg.connect(DATABASE_URL, (err, client) => {
     if (!err) {
-      client.query(QUERY, [uid, tid, category, type, icon, amount, notes, date], (err, result) => {
+      client.query(QUERY, [uid, tid, type, category, icon, amount, notes, date], (err, result) => {
         if (!err) {
           const successMsg = `Sucessfully created transaction: '${tid}' for user '${uid}'`;
           res.json(successJson(successMsg));

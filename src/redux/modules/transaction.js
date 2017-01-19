@@ -15,6 +15,7 @@ const ADD_TRANSACTION = 'ADD_TRANSACTION';
 const POSTING_TRANSACTION = 'POSTING_TRANSACTION';
 const POST_SUCCESS = 'POST_SUCCESS';
 const POST_FAILED = 'POST_FAILED';
+const HYDRATE_TRANSACTIONS = 'HYDRATE_TRANSACTIONS';
 const UPDATE_TRANSACTION = 'UPDATE_TRANSACTION';
 
 export function addTransaction() {
@@ -34,10 +35,9 @@ export function updateTransaction(key, value) {
 export function finalizeTransaction(uid, transaction) {
   return dispatch => {
     const tid = uuid.v4();
-    console.log('tid = ', tid);
-    dispatch(postingTransaction(tid));
-
     const postBody = transaction.toPostBody(uid, tid);
+
+    dispatch(postingTransaction(tid));
 
     axios.post(`${API_ROOT}/api/transactions`, postBody)
       .then(checkStatus)
@@ -69,6 +69,15 @@ function transactionPostFailed(tid) {
   return {
     tid,
     type: POST_FAILED
+  };
+}
+
+export function hydrateTransactions(transactions) {
+  const modeledTransactions = Immutable.OrderedSet(transactions.map(t => Transaction(t)));
+
+  return {
+    transactions: modeledTransactions,
+    type: HYDRATE_TRANSACTIONS
   };
 }
 
@@ -140,6 +149,12 @@ export default (state = initialState, action) => {
       return {
         ...state
       };
+    case HYDRATE_TRANSACTIONS: {
+      return {
+        ...state,
+        transactions: action.transactions
+      };
+    }
     case UPDATE_TRANSACTION:
       return {
         ...state,

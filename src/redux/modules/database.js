@@ -1,5 +1,6 @@
-import { checkStatus } from '../../utils/api';
 import { API_ROOT } from '../../constants/Api';
+import { checkStatus } from '../../utils/api';
+import { hydrateTransactions } from './transaction';
 
 import axios from 'axios';
 
@@ -34,20 +35,21 @@ function addNewUserFailed(error) {
   };
 }
 
-export function fetchUserName(uid) {
+export function fetchUserData(uid) {
   return dispatch => {
     axios.get(`${API_ROOT}/api/user/${uid}`)
       .then(checkStatus)
       .then(({ res }) => {
-        dispatch(fetchUserNameSuccess(res.name));
+        dispatch(fetchUserDataSuccess(res[0].name));
+        dispatch(hydrateTransactions(res));
       })
       .catch(err => {
-        console.error('fetchUserName error: ', err);
+        console.error('fetchUserData error: ', err);
       });
   }
 }
 
-function fetchUserNameSuccess(username) {
+function fetchUserDataSuccess(username) {
   return {
     username,
     type: FETCH_USERNAME_SUCCESS
