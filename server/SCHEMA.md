@@ -23,14 +23,14 @@ CREATE TABLE users (
 
 ```sql
 CREATE TABLE transactions (
-  uid VARCHAR(255) NOT NULL,      -- the user's id
-  tid VARCHAR(255) NOT NULL,      -- transaction id
-  category VARCHAR(32) NOT NULL,  -- transaction category (drinks, salary, etc.)
-  type VARCHAR(7) NOT NULL,       -- transaction type (INCOME | EXPENSE)
-  icon VARCHAR(30) NOT NULL,      -- transaction icon (fa-drinks, fa-salary, etc.)
-  amount MONEY NOT NULL,          -- transaction amount (3.14)
-  date VARCHAR(50) NOT NULL,      -- transaction date ('Sun Jan 15 2017 09:09:22 GMT-0800 (PST)')
-  notes VARCHAR(255)              -- transaction notes
+  uid VARCHAR(255) NOT NULL,        -- the user's id
+  tid VARCHAR(255) NOT NULL UNIQUE, -- transaction id
+  category VARCHAR(32) NOT NULL,    -- transaction category (drinks, salary, etc.)
+  type VARCHAR(7) NOT NULL,         -- transaction type (INCOME | EXPENSE)
+  icon VARCHAR(30) NOT NULL,        -- transaction icon (fa-drinks, fa-salary, etc.)
+  amount MONEY NOT NULL,            -- transaction amount (3.14)
+  date VARCHAR(50) NOT NULL,        -- transaction date ('Sun Jan 15 2017 09:09:22 GMT-0800 (PST)')
+  notes VARCHAR(255)                -- transaction notes
 );
 ```
 
