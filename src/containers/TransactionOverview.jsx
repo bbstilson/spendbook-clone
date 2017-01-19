@@ -15,7 +15,7 @@ class TransactionOverview extends Component {
   }
 
   createNewTransaction() {
-    const { changeView, addTransaction, uid } = this.props;
+    const { changeView, addTransaction } = this.props;
 
     changeView(View.ADD_TRANSACTION);
     addTransaction();
@@ -39,7 +39,7 @@ class TransactionOverview extends Component {
 function mapStateToProps({ transaction, auth, database }) {
   return {
     username: database.username,
-    uid: auth.authedId,
+    // uid: auth.authedId,
     transactions: transaction.transactions
   };
 }

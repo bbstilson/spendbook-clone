@@ -1,8 +1,7 @@
 import { checkStatus } from '../../utils/api';
+import { API_ROOT } from '../../constants/Api';
 
 import axios from 'axios';
-
-const API_ROOT = 'http://localhost:1337';
 
 const ADD_NEW_USER_FAILED = 'ADD_NEW_USER_FAILED';
 const ADD_NEW_USER_SUCCESS = 'ADD_NEW_USER_SUCCESS';
@@ -40,7 +39,6 @@ export function fetchUserName(uid) {
     axios.get(`${API_ROOT}/api/user/${uid}`)
       .then(checkStatus)
       .then(({ res }) => {
-        console.log(res);
         dispatch(fetchUserNameSuccess(res.name));
       })
       .catch(err => {

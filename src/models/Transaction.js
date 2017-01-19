@@ -3,7 +3,7 @@ import expenseCategories from './expenseCategories';
 
 import Immutable from 'immutable';
 
-export default Immutable.Record({
+const Transaction = Immutable.Record({
   type: TransactionType.EXPENSE,
   category: expenseCategories.first().get('name'),
   icon: expenseCategories.first().get('icon'),
@@ -11,3 +11,18 @@ export default Immutable.Record({
   notes: '',
   date: new Date()
 });
+
+Transaction.prototype.toPostBody = function(uid, tid) {
+  return {
+    uid,
+    tid,
+    type: this.get('type'),
+    category: this.get('category'),
+    icon: this.get('icon'),
+    amount: this.get('amount'),
+    notes: this.get('notes'),
+    date: this.get('date')
+  };
+};
+
+export default Transaction;
