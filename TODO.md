@@ -1,1 +1,7 @@
+- css is super borked when the list of anything is long. including icons.
+- test this on a mobile device for realzies
 - login.jsx and signup.jsx could probably be the same component...
+- more complete error handling for everything
+- TESTING (jest/enzyme)
+- refactor/rethink the redux stores. they're all weird right now...
+- add indications of a post submitting. like imessage sending a text or something. that style

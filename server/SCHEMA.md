@@ -35,13 +35,14 @@ CREATE TABLE transactions (
 ```
 
 ### SAMPLE QUERY ALL TRANSACTIONS BY USER ID
+
 ```sql
-SELECT * FROM transactions
-INNER JOIN users
-ON users.uid = transactions.uid
-WHERE users.uid = 'abc123'
-ORDER BY transaction.date
-LIMIT 500 -- or whatever
+SELECT t.*, u.name, u.total
+FROM transactions t
+INNER JOIN users u ON u.uid = t.uid
+WHERE u.uid = 'OYxXxGBSACZAXSZ71I5SZLdOub42'
+ORDER BY date
+LIMIT 500 -- or whatever;
 ```
 
 ### RESULT
