@@ -1,14 +1,20 @@
-import TransactionType from '../../constants/TransactionType';
-import Transaction from '../../models/Transaction';
+import { API_ROOT } from '../../constants/Api';
 import Category from '../../models/Category';
+import { checkStatus } from '../../utils/api';
 import expenseCategories from '../../models/expenseCategories';
 import incomeCategories from '../../models/incomeCategories';
+import Transaction from '../../models/Transaction';
+import TransactionType from '../../constants/TransactionType';
 
 import Immutable from 'immutable';
+import uuid from 'node-uuid';
+import axios from 'axios';
 
 // Constants
 const ADD_TRANSACTION = 'ADD_TRANSACTION';
-const FINALIZE_TRANSACTION = 'FINALIZE_TRANSACTION';
+const POSTING_TRANSACTION = 'POSTING_TRANSACTION';
+const POST_SUCCESS = 'POST_SUCCESS';
+const POST_FAILED = 'POST_FAILED';
 const UPDATE_TRANSACTION = 'UPDATE_TRANSACTION';
 
 export function addTransaction() {
@@ -25,10 +31,44 @@ export function updateTransaction(key, value) {
   };
 }
 
-export function finalizeTransaction(uid) {
+export function finalizeTransaction(uid, transaction) {
+  return dispatch => {
+    const tid = uuid.v4();
+    console.log('tid = ', tid);
+    dispatch(postingTransaction(tid));
+
+    const postBody = transaction.toPostBody(uid, tid);
+
+    axios.post(`${API_ROOT}/api/transactions`, postBody)
+      .then(checkStatus)
+      .then((res) => {
+        dispatch(transactionPostSuccess(tid));
+      })
+      .catch((err) => {
+        console.error('Error while posting transaction:', err);
+        dispatch(transactionPostFailed(tid));
+      });
+  }
+}
+
+function postingTransaction(tid) {
   return {
-    uid,
-    type: FINALIZE_TRANSACTION
+    tid,
+    type: POSTING_TRANSACTION
+  };
+}
+
+function transactionPostSuccess(tid) {
+  return {
+    tid,
+    type: POST_SUCCESS
+  };
+}
+
+function transactionPostFailed(tid) {
+  return {
+    tid,
+    type: POST_FAILED
   };
 }
 
@@ -86,10 +126,19 @@ export default (state = initialState, action) => {
         ...state,
         newTransaction: Transaction()
       };
-    case FINALIZE_TRANSACTION:
+    case POSTING_TRANSACTION:
       return {
         ...state,
         transactions: state.transactions.add(state.newTransaction)
+      };
+    case POST_SUCCESS:
+      return {
+        ...state,
+        transactions: state.transactions.add(state.newTransaction)
+      };
+    case POST_FAILED:
+      return {
+        ...state
       };
     case UPDATE_TRANSACTION:
       return {

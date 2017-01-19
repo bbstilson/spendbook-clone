@@ -32,9 +32,9 @@ class AddTransaction extends Component {
   }
 
   confirmTransaction() {
-    const { finalizeTransaction, changeView, uid } = this.props;
+    const { finalizeTransaction, changeView, uid, transaction } = this.props;
 
-    finalizeTransaction(uid);
+    finalizeTransaction(uid, transaction);
     changeView(View.OVERVIEW);
   }
 
@@ -87,6 +87,7 @@ class AddTransaction extends Component {
 function mapStateToProps({ transaction, auth }) {
   return {
     uid: auth.authedId,
+    transaction: transaction.newTransaction,
     type: transaction.newTransaction.get('type'),
     category: transaction.newTransaction.get('category'),
     icon: transaction.newTransaction.get('icon'),
