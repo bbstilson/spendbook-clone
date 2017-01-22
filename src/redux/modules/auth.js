@@ -56,6 +56,8 @@ function toUserFriendlyErrorMessage(error) {
       return "Sorry, we couldn't find that user.";
     case 'auth/invalid-email':
       return "Oops, looks like you didn't enter a valid email.";
+    case 'auth/wrong-password':
+      return "Looks like that wasn't the correct password! Try again."
     default:
       return "Sorry, something happened. Try again. If it keeps happening, let me know.";
   }
