@@ -67,7 +67,7 @@ export function updateTotal(uid, total) {
     axios.patch(`${API_ROOT}/api/user/${uid}`, { total })
       .then(checkStatus)
       .then((res) => {
-        console.log('successfully updated total:', res);
+        // console.log('successfully updated total:', res);
       })
       .catch(err => {
         console.error('Error while updating total:', err);

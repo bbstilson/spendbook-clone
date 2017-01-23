@@ -1,0 +1,18 @@
+.nav {
+  height: 30px;
+  min-width: 30px;
+  background-position: center;
+  background-size: cover;
+  z-index: 10;
+  font-weight: 300;
+  font-size: 1.2em;
+  cursor: pointer;
+  line-height: 30px;
+}
+
+.nav.add {
+  background-image: url('./plus.png');
+}
+.nav.back {
+  background-image: url('./back.png');
+}
