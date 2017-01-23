@@ -37,7 +37,7 @@ app.get('/api/user/:uid', (req, res) => {
     'INNER JOIN users u ' +
     'ON u.uid = t.uid ' +
     'WHERE u.uid = $1 ' +
-    'ORDER BY date;'
+    'ORDER BY t.date DESC;'
 
   pg.connect(DATABASE_URL, (err, client) => {
     if (!err) {

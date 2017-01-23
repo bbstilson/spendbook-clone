@@ -88,25 +88,10 @@ function updatedTransaction(state, action) {
   const category = updatedCategoryIcon.get('name');
   const icon = updatedCategoryIcon.get('icon');
 
-  const amount = action.key === 'amount' ? santizeAmount(action.value) : state.get('amount');
+  const amount = action.key === 'amount' ? action.value : state.get('amount');
   const notes = action.key === 'notes' ? action.value : state.get('notes');
 
   return Transaction({ type, category, icon, amount, notes });
-}
-
-function santizeAmount(input) {
-  const lastInput = input.slice(-1);
-  // `input` is a number
-  if (/\d/.test(lastInput)) {
-    // `input` has a leading 0
-    if (input.slice(0, 1) === '0') {
-      return input.slice(1);
-    } else {
-      return input;
-    }
-  } else {
-    return input.slice(0, input.length - 1);
-  }
 }
 
 function updateCategoryIcon(state, action) {
@@ -138,16 +123,17 @@ export default (state = initialState, action) => {
     case POSTING_TRANSACTION:
       return {
         ...state,
-        transactions: state.transactions.add(state.newTransaction)
+        transactions: merge(state.newTransaction, state.transactions)
       };
     case POST_SUCCESS:
       return {
         ...state,
-        transactions: state.transactions.add(state.newTransaction)
+        // change status of post by tid to success...
       };
     case POST_FAILED:
       return {
-        ...state
+        ...state,
+        // change status of post by tid to failed...
       };
     case HYDRATE_TRANSACTIONS: {
       return {
@@ -163,4 +149,9 @@ export default (state = initialState, action) => {
     default:
       return state;
   }
+}
+
+function merge(newTransaction, transactions) {
+  // New transactions should be added to the top of the list.
+  return Immutable.OrderedSet([ newTransaction ]).union(transactions);
 }

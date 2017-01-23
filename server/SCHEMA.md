@@ -41,7 +41,7 @@ SELECT t.*, u.name, u.total
 FROM transactions t
 INNER JOIN users u ON u.uid = t.uid
 WHERE u.uid = 'OYxXxGBSACZAXSZ71I5SZLdOub42'
-ORDER BY date
+ORDER BY t.date;
 LIMIT 500 -- or whatever;
 ```
 
