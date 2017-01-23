@@ -9,12 +9,7 @@ import { connect } from 'react-redux';
 import './ContainerView.css';
 
 class TransactionOverview extends Component {
-  constructor() {
-    super();
-    this.createNewTransaction = this.createNewTransaction.bind(this);
-  }
-
-  createNewTransaction() {
+  createNewTransaction = () => {
     const { changeView, addTransaction } = this.props;
 
     changeView(View.ADD_TRANSACTION);
@@ -26,11 +21,10 @@ class TransactionOverview extends Component {
       <div className="overview">
         <div className="header">
           <div />
-          <h1>Overview</h1>
+          <h1>{this.props.total}</h1>
           <button onClick={this.createNewTransaction}>+</button>
         </div>
-        {/* TODO: replace index key with ID. also, add tid to transaction */}
-        {this.props.transactions.map((t, i) => <Transaction key={i} transaction={t} />)}
+        {this.props.transactions.map((t) => <Transaction key={t.tid} transaction={t} />)}
       </div>
     );
   }
@@ -38,8 +32,9 @@ class TransactionOverview extends Component {
 
 function mapStateToProps({ transaction, auth, database }) {
   return {
-    username: database.username,
-    // uid: auth.authedId,
+    name: database.name,
+    total: database.total,
+    uid: auth.uid,
     transactions: transaction.transactions
   };
 }

@@ -95,7 +95,7 @@ function unauthUser () {
 const initialState = {
   isFetching: false,
   isAuthed: false,
-  authedId: '',
+  uid: '',
   error: ''
 };
 
@@ -111,7 +111,7 @@ export default (state = initialState, action = {}) => {
         ...state,
         isFetching: false,
         isAuthed: true,
-        authedId: action.uid
+        uid: action.uid
       };
     case AUTH_FAILED:
       return {
@@ -124,7 +124,7 @@ export default (state = initialState, action = {}) => {
       return {
         ...state,
         isAuthed: false,
-        authedId: ''
+        uid: ''
       };
     default:
       return state;

@@ -4,6 +4,8 @@ import expenseCategories from './expenseCategories';
 import Immutable from 'immutable';
 
 const Transaction = Immutable.Record({
+  uid: '',
+  tid: '',
   type: TransactionType.EXPENSE,
   category: expenseCategories.first().get('name'),
   icon: expenseCategories.first().get('icon'),

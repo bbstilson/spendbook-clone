@@ -7,6 +7,8 @@ import axios from 'axios';
 const ADD_NEW_USER_FAILED = 'ADD_NEW_USER_FAILED';
 const ADD_NEW_USER_SUCCESS = 'ADD_NEW_USER_SUCCESS';
 const FETCH_USERNAME_SUCCESS = 'FETCH_USERNAME_SUCCESS';
+const UPDATING_TOTAL = 'UPDATING_TOTAL';
+const UPDATE_TOTAL_FAILED = 'UPDATE_TOTAL_FAILED';
 
 export function addNewUserToDb(name, uid) {
   return dispatch => {
@@ -40,7 +42,7 @@ export function fetchUserData(uid) {
     axios.get(`${API_ROOT}/api/user/${uid}`)
       .then(checkStatus)
       .then(({ res }) => {
-        dispatch(fetchUserDataSuccess(res[0].name));
+        dispatch(fetchUserDataSuccess(res[0]));
         dispatch(hydrateTransactions(res));
       })
       .catch(err => {
@@ -49,17 +51,66 @@ export function fetchUserData(uid) {
   }
 }
 
-function fetchUserDataSuccess(username) {
+function fetchUserDataSuccess({ name, total }) {
   return {
-    username,
+    name,
+    total,
     type: FETCH_USERNAME_SUCCESS
   };
+}
+
+export function updateTotal(uid, total) {
+  return dispatch => {
+
+    dispatch(updatingTotal(formatNumber(total)));
+
+    axios.patch(`${API_ROOT}/api/user/${uid}`, { total })
+      .then(checkStatus)
+      .then((res) => {
+        console.log('successfully updated total:', res);
+      })
+      .catch(err => {
+        console.error('Error while updating total:', err);
+        dispatch(updateTotalFailed(err));
+      });
+  }
+}
+
+function formatNumber(num) {
+  return '$' + num.toFixed(2).split('.').map((part) => {
+    if (part.length > 3) {
+      return part.split('').reverse().map((n, idx, number) => {
+        if (idx % 3 === 0 && idx > 2) {
+          return n + ',';
+        } else {
+          return n;
+        }
+      }).reverse().join('');
+    } else {
+      // cents
+      return part;
+    }
+  }).join('.');
+}
+
+function updatingTotal(total) {
+  return {
+    total,
+    type: UPDATING_TOTAL
+  };
+}
+
+function updateTotalFailed(err) {
+  return {
+    type: UPDATE_TOTAL_FAILED
+  }
 }
 
 const initialState = {
   response: '',
   error: '',
-  username: ''
+  username: '',
+  total: ''
 };
 
 export default (state = initialState, action) => {
@@ -78,7 +129,13 @@ export default (state = initialState, action) => {
     case FETCH_USERNAME_SUCCESS:
       return {
         ...state,
-        username: action.username
+        name: action.name,
+        total: action.total
+      };
+    case UPDATING_TOTAL:
+      return {
+        ...state,
+        total: action.total
       };
     default:
       return state;
