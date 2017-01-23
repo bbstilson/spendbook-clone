@@ -7,7 +7,7 @@ const pg = require('pg');
 // https://devcenter.heroku.com/articles/heroku-postgresql#connecting-in-node-js
 // pg.defaults.ssl = true;
 
-const DATABASE_URL = process.env.DATABASE_URL || 'postgres:///brandons';
+const DATABASE_URL = process.env.DATABASE_URL || 'postgres:///brandonstilson';
 
 const app = express();
 // ALLOW CORS
@@ -37,7 +37,7 @@ app.get('/api/user/:uid', (req, res) => {
     'INNER JOIN users u ' +
     'ON u.uid = t.uid ' +
     'WHERE u.uid = $1 ' +
-    'ORDER BY date;'
+    'ORDER BY t.date DESC;'
 
   pg.connect(DATABASE_URL, (err, client) => {
     if (!err) {

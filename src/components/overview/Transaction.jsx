@@ -10,6 +10,16 @@ function sign(type) {
   return type === TransactionType.EXPENSE ? '- ' : '+ ';
 }
 
+function toDollar(amount) {
+  const hasDollarSign = /\$/;
+
+  if (hasDollarSign.test(amount)) {
+    return amount;
+  } else {
+    return `$${parseFloat(amount).toFixed(2)}`;
+  }
+}
+
 const Transaction = ({ transaction: { icon, type, category, amount, notes } }) => (
   <div className="transaction">
     <div className="transaction-info__left">
@@ -20,7 +30,7 @@ const Transaction = ({ transaction: { icon, type, category, amount, notes } }) =
       </div>
     </div>
     <div className="transaction-info__right">
-      <p className={classnames('transaction-amount', type.toLowerCase())}>{sign(type)}{amount}</p>
+      <p className={classnames('transaction-amount', type.toLowerCase())}>{sign(type)}{toDollar(amount)}</p>
     </div>
   </div>
 );
