@@ -1,7 +1,8 @@
-import TransactionTypeToggle from '../components/add-transaction/TransactionTypeToggle';
+import CategoryMap from '../components/add-transaction/CategoryMap';
 import TransactionAmount from '../components/add-transaction/TransactionAmount';
 import TransactionNotes from '../components/add-transaction/TransactionNotes';
-import CategoryMap from '../components/add-transaction/CategoryMap';
+import TransactionTypeToggle from '../components/add-transaction/TransactionTypeToggle';
+import Nav from '../components/navigation/Nav';
 
 import { changeView } from '../redux/modules/app';
 import { updateTransaction, finalizeTransaction } from '../redux/modules/transaction';
@@ -52,9 +53,9 @@ class AddTransaction extends Component {
     return (
       <div className="overview">
         <div className="header">
-          <button onClick={() => { changeView(View.OVERVIEW) }}>{'<'}</button>
+          <Nav type="back" onClick={() => { changeView(View.OVERVIEW) }} />
           <h1>Add Transaction</h1>
-          <button onClick={this.confirmTransaction}>Done</button>
+          <Nav onClick={this.confirmTransaction}>Done</Nav>
         </div>
         <div>
           <TransactionTypeToggle

@@ -1,4 +1,4 @@
-- css is super borked when the list of anything is long. including icons.
+- don't let a post of $0
 - test this on a mobile device for realzies
 - login.jsx and signup.jsx could probably be the same component...
 - more complete error handling for everything

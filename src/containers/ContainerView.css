@@ -1,5 +1,7 @@
 .overview {
   text-align: center;
+  position: relative;
+  margin-bottom: 50px;
 }
 
 .header {
@@ -8,4 +10,9 @@
   justify-content: space-between;
   align-items: center;
   padding: 1em 0;
+  height: 70px;
+}
+
+.header h1 {
+  font-size: 1.5em;
 }
