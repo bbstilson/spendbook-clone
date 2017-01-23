@@ -12,8 +12,9 @@ const DATABASE_URL = process.env.DATABASE_URL || 'postgres:///brandonstilson';
 const app = express();
 // ALLOW CORS
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH');
   next();
 });
 app.use(morgan('dev')); // logging
@@ -21,13 +22,7 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 /**
- * GET a transaction table by user id
- *
- * success (if 'brandonsSuperCoolId123' exists in the db)
- * curl http://localhost:1337/api/user/brandonsSuperCoolId123
- *
- * failure (assuming 'ravioliravioligivemetheformuoli' wasn't added)
- * curl http://localhost:1337/api/user/ravioliravioligivemetheformuoli
+ * GET transactions by user id
  */
 app.get('/api/user/:uid', (req, res) => {
   const uid = req.params.uid;
@@ -60,18 +55,22 @@ app.get('/api/user/:uid', (req, res) => {
 });
 
 /**
- * GET all users from the users table.
- *
- * curl http://localhost:1337/api/users
+ * PATCH user total
  */
-app.get('/api/users', (req, res) => {
+app.patch('/api/user/:uid', (req, res) => {
+  const uid = req.params.uid;
+  const total = req.body.total;
+
+  const QUERY = 'UPDATE users SET total = $1 WHERE uid = $2';
+
   pg.connect(DATABASE_URL, (err, client) => {
     if (!err) {
-      client.query('SELECT * FROM users', (err, result) => {
+      client.query(QUERY, [total, uid], (err, result) => {
         if (!err) {
-          res.json(successJson(result.rows));
+          const successMsg = `Total for '${uid}' is now ${total}`;
+          res.json(successJson(successMsg));
         } else {
-          res.json({ status: 400, msg: err.detail });
+          res.json({ status: 500, msg: err.detail });
         }
       });
     } else {
@@ -82,9 +81,6 @@ app.get('/api/users', (req, res) => {
 
 /**
  * POST a new user.
- *
- * curl -X POST -H "Content-Type: application/json" -d '{ "uid": "brandonsSuperCoolId123" }' http://localhost:1337/api/user
- * curl -X POST -H "Content-Type: application/json" -d '{ "uid": "allieAlsoHasAReallyCoolId" }' http://localhost:1337/api/user
  */
 app.post('/api/user', (req, res) => {
   const uid = req.body.uid;
@@ -108,11 +104,6 @@ app.post('/api/user', (req, res) => {
 
 /**
  * POST a new transaction
- */
-/*
-  curl -X POST -H "Content-Type: application/json" \
-    -d '{ "uid": "123", "type": "EXPENSE", "category": "FOOD", "icon": "fa-food", "amount": 40, "notes": "it was good" }' \
-    http://localhost:1337/api/transactions
  */
 app.post('/api/transactions', (req, res) => {
   const { uid, tid, type, category, icon, amount, notes, date } = req.body;
@@ -155,5 +146,5 @@ function successJson(res) {
 }
 
 function failedToConnect(res) {
-  res.send({ status: 500, msg: "Failed to connect to database." });
+  res.send({ status: 500, msg: 'Failed to connect to database.' });
 }

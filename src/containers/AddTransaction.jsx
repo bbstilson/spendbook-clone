@@ -5,6 +5,7 @@ import CategoryMap from '../components/add-transaction/CategoryMap';
 
 import { changeView } from '../redux/modules/app';
 import { updateTransaction, finalizeTransaction } from '../redux/modules/transaction';
+import { updateTotal } from '../redux/modules/database';
 import View from '../constants/View';
 import TransactionType from '../constants/TransactionType';
 import expenseCategories from '../models/expenseCategories';
@@ -23,6 +24,7 @@ class AddTransaction extends Component {
     notes: PropTypes.string.isRequired,
     changeView: PropTypes.func.isRequired,
     updateTransaction: PropTypes.func.isRequired,
+    updateTotal: PropTypes.func.isRequired,
     finalizeTransaction: PropTypes.func.isRequired
   }
 
@@ -31,10 +33,24 @@ class AddTransaction extends Component {
     this.confirmTransaction = this.confirmTransaction.bind(this);
   }
 
+  updateTotal() {
+    const { total, updateTotal, type, transaction, uid } = this.props;
+
+    let newTotal;
+    if (type === TransactionType.EXPENSE) {
+      newTotal = parseFloat(total.slice(1)) - parseFloat(transaction.amount);
+    } else {
+      newTotal = parseFloat(total.slice(1)) + parseFloat(transaction.amount);
+    }
+
+    updateTotal(uid, newTotal);
+  }
+
   confirmTransaction() {
     const { finalizeTransaction, changeView, uid, transaction } = this.props;
 
     finalizeTransaction(uid, transaction);
+    this.updateTotal();
     changeView(View.OVERVIEW);
   }
 
@@ -84,9 +100,10 @@ class AddTransaction extends Component {
   }
 }
 
-function mapStateToProps({ transaction, auth }) {
+function mapStateToProps({ auth, database, transaction }) {
   return {
-    uid: auth.authedId,
+    total: database.total,
+    uid: auth.uid,
     transaction: transaction.newTransaction,
     type: transaction.newTransaction.get('type'),
     category: transaction.newTransaction.get('category'),
@@ -96,4 +113,7 @@ function mapStateToProps({ transaction, auth }) {
   }
 }
 
-export default connect(mapStateToProps, { changeView, updateTransaction, finalizeTransaction })(AddTransaction)
+export default connect(
+  mapStateToProps,
+  { changeView, updateTransaction, finalizeTransaction, updateTotal }
+)(AddTransaction);
