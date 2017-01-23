@@ -28,25 +28,17 @@ class AddTransaction extends Component {
     finalizeTransaction: PropTypes.func.isRequired
   }
 
-  constructor() {
-    super();
-    this.confirmTransaction = this.confirmTransaction.bind(this);
-  }
-
   updateTotal() {
     const { total, updateTotal, type, transaction, uid } = this.props;
 
-    let newTotal;
-    if (type === TransactionType.EXPENSE) {
-      newTotal = parseFloat(total.slice(1)) - parseFloat(transaction.amount);
-    } else {
-      newTotal = parseFloat(total.slice(1)) + parseFloat(transaction.amount);
-    }
+    const totalAsNum = parseFloat(total.replace(/[\$,]/g, ''));
+    const amountAsNum = parseFloat(transaction.amount);
+    const newTotal = type === TransactionType.EXPENSE ? (totalAsNum - amountAsNum): (totalAsNum + amountAsNum);
 
     updateTotal(uid, newTotal);
   }
 
-  confirmTransaction() {
+  confirmTransaction = () => {
     const { finalizeTransaction, changeView, uid, transaction } = this.props;
 
     finalizeTransaction(uid, transaction);

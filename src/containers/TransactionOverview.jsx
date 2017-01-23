@@ -9,12 +9,7 @@ import { connect } from 'react-redux';
 import './ContainerView.css';
 
 class TransactionOverview extends Component {
-  constructor() {
-    super();
-    this.createNewTransaction = this.createNewTransaction.bind(this);
-  }
-
-  createNewTransaction() {
+  createNewTransaction = () => {
     const { changeView, addTransaction } = this.props;
 
     changeView(View.ADD_TRANSACTION);

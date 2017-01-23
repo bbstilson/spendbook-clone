@@ -62,18 +62,35 @@ function fetchUserDataSuccess({ name, total }) {
 export function updateTotal(uid, total) {
   return dispatch => {
 
-    dispatch(updatingTotal(total));
+    dispatch(updatingTotal(formatNumber(total)));
 
     axios.patch(`${API_ROOT}/api/user/${uid}`, { total })
       .then(checkStatus)
       .then((res) => {
-        console.log('successfully updated total...', res);
+        console.log('successfully updated total:', res);
       })
       .catch(err => {
         console.error('Error while updating total:', err);
         dispatch(updateTotalFailed(err));
       });
   }
+}
+
+function formatNumber(num) {
+  return '$' + num.toFixed(2).split('.').map((part) => {
+    if (part.length > 3) {
+      return part.split('').reverse().map((n, idx, number) => {
+        if (idx % 3 === 0 && idx > 2) {
+          return n + ',';
+        } else {
+          return n;
+        }
+      }).reverse().join('');
+    } else {
+      // cents
+      return part;
+    }
+  }).join('.');
 }
 
 function updatingTotal(total) {
@@ -93,7 +110,7 @@ const initialState = {
   response: '',
   error: '',
   username: '',
-  total: '$...'
+  total: ''
 };
 
 export default (state = initialState, action) => {
