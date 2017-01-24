@@ -11,6 +11,7 @@
     "firebase": "^3.6.5",
     "immutable": "^3.8.1",
     "node-uuid": "^1.4.7",
+    "npm-run-all": "^4.0.1",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
     "react-redux": "^5.0.1",
@@ -21,7 +22,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && npm run start-server",
+    "build": "npm-run-all rs-build start-server",
+    "rs-build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "start-server": "node ./server/index.js"
