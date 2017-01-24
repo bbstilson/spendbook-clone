@@ -7,7 +7,7 @@ const pg = require('pg');
 // https://devcenter.heroku.com/articles/heroku-postgresql#connecting-in-node-js
 // pg.defaults.ssl = true;
 
-const DATABASE_URL = process.env.DATABASE_URL || 'postgres:///brandonstilson';
+const DATABASE_URL = process.env.DATABASE_URL;
 
 const app = express();
 // ALLOW CORS

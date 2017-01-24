@@ -1,11 +1,11 @@
 import firebase from 'firebase';
 
 // Initialize Firebase
-const apiKey = 'AIzaSyA4B1kM57fuYQmOMPvQEcDFtipOfY_dH44';
-const authDomain = 'spendbook-d0ee0.firebaseapp.com';
-const databaseURL = 'https://spendbook-d0ee0.firebaseio.com';
-const storageBucket = 'spendbook-d0ee0.appspot.com';
-const messagingSenderId = '623051534627';
+const apiKey = process.env.FB_API_KEY;
+const authDomain = process.env.FB_AUTH_DOMAIN;
+const databaseURL = process.env.FB_DATABASE_URL;
+const storageBucket = process.env.FB_STORAGE_BUCKET;
+const messagingSenderId = process.env.FB_SENDER_ID;
 
 const config = { apiKey, authDomain, databaseURL, storageBucket, messagingSenderId };
 
