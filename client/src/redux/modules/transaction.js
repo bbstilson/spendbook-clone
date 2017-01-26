@@ -1,4 +1,3 @@
-import { API_ROOT } from '../../constants/Api';
 import Category from '../../models/Category';
 import { checkStatus } from '../../utils/api';
 import expenseCategories from '../../models/expenseCategories';
@@ -39,7 +38,7 @@ export function finalizeTransaction(uid, transaction) {
 
     dispatch(postingTransaction(tid));
 
-    axios.post(`${API_ROOT}/api/transactions`, postBody)
+    axios.post('api/transactions', postBody)
       .then(checkStatus)
       .then((res) => {
         dispatch(transactionPostSuccess(tid));

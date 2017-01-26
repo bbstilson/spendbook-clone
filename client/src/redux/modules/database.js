@@ -1,4 +1,3 @@
-import { API_ROOT } from '../../constants/Api';
 import { checkStatus } from '../../utils/api';
 import { hydrateTransactions } from './transaction';
 
@@ -12,7 +11,7 @@ const UPDATE_TOTAL_FAILED = 'UPDATE_TOTAL_FAILED';
 
 export function addNewUserToDb(name, uid) {
   return dispatch => {
-    axios.post(`${API_ROOT}/api/user`, { name, uid })
+    axios.post('api/user', { name, uid })
       .then((res) => {
         dispatch(addNewUserSuccess(name, res));
       })
@@ -39,7 +38,7 @@ function addNewUserFailed(error) {
 
 export function fetchUserData(uid) {
   return dispatch => {
-    axios.get(`${API_ROOT}/api/user/${uid}`)
+    axios.get(`api/user/${uid}`)
       .then(checkStatus)
       .then(({ res }) => {
         dispatch(fetchUserDataSuccess(res[0]));
@@ -64,7 +63,9 @@ export function updateTotal(uid, total) {
 
     dispatch(updatingTotal(formatNumber(total)));
 
-    axios.patch(`${API_ROOT}/api/user/${uid}`, { total })
+    console.log(total, uid);
+
+    axios.patch(`api/user/${uid}`, { total })
       .then(checkStatus)
       .then((res) => {
         // console.log('successfully updated total:', res);

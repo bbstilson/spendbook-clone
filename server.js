@@ -12,7 +12,8 @@ const app = express();
 
 const DATABASE_URL = process.env.DATABASE_URL;
 console.log(DATABASE_URL);
-app.set('port', (process.env.PORT || 3001));
+app.set('port', (process.env.PORT || 1337));
+
 
 // Express only serves static assets in production
 if (process.env.NODE_ENV === 'production') {
