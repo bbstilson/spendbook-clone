@@ -7,16 +7,24 @@ const pg = require('pg');
 // https://devcenter.heroku.com/articles/heroku-postgresql#connecting-in-node-js
 // pg.defaults.ssl = true;
 
-const DATABASE_URL = process.env.DATABASE_URL;
 
 const app = express();
-// ALLOW CORS
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH');
-  next();
-});
+
+const DATABASE_URL = process.env.DATABASE_URL;
+app.set('port', (process.env.PORT || 3001));
+
+// Express only serves static assets in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+}
+
+// // ALLOW CORS
+// app.use((req, res, next) => {
+//   res.header('Access-Control-Allow-Origin', '*');
+//   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+//   res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH');
+//   next();
+// });
 app.use(morgan('dev')); // logging
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -132,19 +140,22 @@ app.post('/api/transactions', (req, res) => {
  * PATCH a transaction
  */
 
-app.listen(1337);
-
 /**
  * Util functions
  */
 
 function successJson(res) {
-  return {
-    res,
-    status: 200,
-  };
+ return {
+   res,
+   status: 200,
+ };
 }
 
 function failedToConnect(res) {
-  res.send({ status: 500, msg: 'Failed to connect to database.' });
+ res.send({ status: 500, msg: 'Failed to connect to database.' });
 }
+
+
+app.listen(app.get('port'), () => {
+  console.log(`Find the server at: http://localhost:${app.get('port')}/`); // eslint-disable-line no-console
+});

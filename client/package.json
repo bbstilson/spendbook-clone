@@ -1,0 +1,31 @@
+{
+  "name": "balanced-app",
+  "version": "0.0.1",
+  "private": true,
+  "proxy": "http://localhost:1337/",
+  "devDependencies": {
+    "enzyme": "^2.4.1",
+    "react-addons-test-utils": "^15.4.0",
+    "react-scripts": "0.7.0"
+  },
+  "dependencies": {
+    "axios": "^0.15.3",
+    "classnames": "^2.2.5",
+    "firebase": "^3.6.7",
+    "immutable": "^3.8.1",
+    "node-uuid": "^1.4.7",
+    "react": "^15.4.0",
+    "react-dom": "^15.4.0",
+    "react-redux": "^5.0.2",
+    "react-router": "^4.0.0-alpha.6",
+    "react-simple-loading": "0.0.3",
+    "redux": "^3.6.0",
+    "redux-thunk": "^2.2.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
