@@ -1,3 +1,8 @@
+// In developement mode, load the environment variables.
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
@@ -7,13 +12,7 @@ const pg = require('pg');
 // https://devcenter.heroku.com/articles/heroku-postgresql#connecting-in-node-js
 // pg.defaults.ssl = true;
 
-
 const app = express();
-
-const DATABASE_URL = process.env.DATABASE_URL;
-console.log(DATABASE_URL);
-app.set('port', (process.env.PORT || 1337));
-
 
 // Express only serves static assets in production
 if (process.env.NODE_ENV === 'production') {
@@ -27,9 +26,12 @@ if (process.env.NODE_ENV === 'production') {
 //   res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH');
 //   next();
 // });
+app.set('port', (process.env.PORT || 1337));
 app.use(morgan('dev')); // logging
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+
+const DATABASE_URL = process.env.DATABASE_URL;
 
 /**
  * GET transactions by user id
