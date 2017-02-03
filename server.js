@@ -50,9 +50,9 @@ app.get('/api/user/:uid', (req, res) => {
     if (!err) {
       client.query(QUERY, [uid], (err, result) => {
         if (!err) {
-          if (result.rows.length === 0) {
-            const errorMsg = `No results for uid: ${uid}`;
-            res.json({ status: 500, msg: errorMsg });
+          if (result.rowCount === 0) {
+            const noTransactionsFound = [{ err: 'No transactions.', total: '$0.00', name: '' }];
+            res.json(successJson(noTransactionsFound));
           } else {
             res.json(successJson(result.rows));
           }
@@ -117,7 +117,7 @@ app.post('/api/user', (req, res) => {
 /**
  * POST a new transaction
  */
-app.post('/api/transactions', (req, res) => {
+app.post('/api/transaction', (req, res) => {
   const { uid, tid, type, category, icon, amount, notes, date } = req.body;
 
   const QUERY =

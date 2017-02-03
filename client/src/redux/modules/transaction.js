@@ -15,6 +15,7 @@ const POSTING_TRANSACTION = 'POSTING_TRANSACTION';
 const POST_SUCCESS = 'POST_SUCCESS';
 const POST_FAILED = 'POST_FAILED';
 const HYDRATE_TRANSACTIONS = 'HYDRATE_TRANSACTIONS';
+const NO_TRANSACTIONS_TO_HYDRATE = 'NO_TRANSACTIONS_TO_HYDRATE';
 const UPDATE_TRANSACTION = 'UPDATE_TRANSACTION';
 
 export function addTransaction() {
@@ -33,54 +34,57 @@ export function updateTransaction(key, value) {
 
 export function finalizeTransaction(uid, transaction) {
   return dispatch => {
-    const tid = uuid.v4();
-    const postBody = transaction.toPostBody(uid, tid);
+    const postBody = transaction.toPostBody(uid);
 
-    dispatch(postingTransaction(tid));
+    dispatch(postingTransaction());
 
-    axios.post('api/transactions', postBody)
+    axios.post('api/transaction', postBody)
       .then(checkStatus)
       .then((res) => {
-        dispatch(transactionPostSuccess(tid));
+        console.log(res);
+        dispatch(transactionPostSuccess());
       })
       .catch((err) => {
         console.error('Error while posting transaction:', err);
-        dispatch(transactionPostFailed(tid));
+        dispatch(transactionPostFailed());
       });
   }
 }
 
-function postingTransaction(tid) {
+function postingTransaction() {
   return {
-    tid,
     type: POSTING_TRANSACTION
   };
 }
 
-function transactionPostSuccess(tid) {
+function transactionPostSuccess() {
   return {
-    tid,
     type: POST_SUCCESS
   };
 }
 
-function transactionPostFailed(tid) {
+function transactionPostFailed() {
   return {
-    tid,
     type: POST_FAILED
   };
 }
 
 export function hydrateTransactions(transactions) {
-  const modeledTransactions = Immutable.OrderedSet(transactions.map(t => Transaction(t)));
-
-  return {
-    transactions: modeledTransactions,
-    type: HYDRATE_TRANSACTIONS
-  };
+  if (transactions[0].err) {
+    return {
+      type: NO_TRANSACTIONS_TO_HYDRATE
+    };
+  } else {
+    const modeledTransactions = Immutable.OrderedSet(transactions.map(t => Transaction(t)));
+    return {
+      transactions: modeledTransactions,
+      type: HYDRATE_TRANSACTIONS
+    };
+  }
 }
 
 function updatedTransaction(state, action) {
+  const tid = state.get('tid');
   const type = action.key === 'type' ? action.value : state.get('type');
 
   const updatedCategoryIcon = updateCategoryIcon(state, action);
@@ -90,7 +94,7 @@ function updatedTransaction(state, action) {
   const amount = action.key === 'amount' ? action.value : state.get('amount');
   const notes = action.key === 'notes' ? action.value : state.get('notes');
 
-  return Transaction({ type, category, icon, amount, notes });
+  return Transaction({ tid, type, category, icon, amount, notes });
 }
 
 function updateCategoryIcon(state, action) {
@@ -117,7 +121,7 @@ export default (state = initialState, action) => {
     case ADD_TRANSACTION:
       return {
         ...state,
-        newTransaction: Transaction()
+        newTransaction: Transaction({ tid: uuid.v4() })
       };
     case POSTING_TRANSACTION:
       return {
@@ -145,6 +149,9 @@ export default (state = initialState, action) => {
         ...state,
         newTransaction: updatedTransaction(state.newTransaction, action)
       };
+    case NO_TRANSACTIONS_TO_HYDRATE:
+      // TODO: make a nice user message.
+      return state;
     default:
       return state;
   }

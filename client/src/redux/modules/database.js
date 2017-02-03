@@ -80,13 +80,9 @@ export function updateTotal(uid, total) {
 function formatNumber(num) {
   return '$' + num.toFixed(2).split('.').map((part) => {
     if (part.length > 3) {
-      return part.split('').reverse().map((n, idx, number) => {
-        if (idx % 3 === 0 && idx > 2) {
-          return n + ',';
-        } else {
-          return n;
-        }
-      }).reverse().join('');
+      return part.split('').reverse().map((n, idx, number) =>
+        (idx % 3 === 0 && idx > 2) ? `${n},` : n
+      ).reverse().join('');
     } else {
       // cents
       return part;
@@ -111,7 +107,7 @@ const initialState = {
   response: '',
   error: '',
   username: '',
-  total: ''
+  total: '$0.00'
 };
 
 export default (state = initialState, action) => {

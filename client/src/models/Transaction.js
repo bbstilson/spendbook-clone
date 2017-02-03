@@ -14,10 +14,10 @@ const Transaction = Immutable.Record({
   date: new Date()
 });
 
-Transaction.prototype.toPostBody = function(uid, tid) {
+Transaction.prototype.toPostBody = function(uid) {
   return {
     uid,
-    tid,
+    tid: this.get('tid'),
     type: this.get('type'),
     category: this.get('category'),
     icon: this.get('icon'),

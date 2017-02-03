@@ -1,4 +1,5 @@
-- don't let a post of $0
+- don't allow a post of $0
+- total formatting. negative is all fucky.
 - test this on a mobile device for realzies
 - login.jsx and signup.jsx could probably be the same component...
 - more complete error handling for everything
