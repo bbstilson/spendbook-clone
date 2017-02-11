@@ -74,6 +74,7 @@ class AddTransaction extends Component {
             amount={amount}
             type={type.toLowerCase()}
             updateAmount={(e) => { updateTransaction('amount', e.target.value) }} />
+        <TransactionNotes text={notes} updateNotes={e => { updateTransaction('notes', e.target.value) }} />
         {
           type === TransactionType.EXPENSE
             ? <CategoryMap
@@ -87,7 +88,6 @@ class AddTransaction extends Component {
                 categories={incomeCategories}
                 updateCategory={(cat) => { updateTransaction('category', cat) }} />
         }
-        <TransactionNotes text={notes} updateNotes={(e) => { updateTransaction('notes', e.target.value) }} />
       </div>
     );
   }
